@@ -32,7 +32,6 @@ class BootstrapTheme {
 }
 
 void main() {
-  // App entry point.
   runApp(const MyApp());
 }
 
@@ -48,6 +47,7 @@ class _MyAppState extends State<MyApp> {
   bool _showSplash = true;
 
   @override
+  // Official Screen
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AeroCalc - Drone Flight Simulator',
@@ -76,6 +76,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.onFinished});
 
   @override
+  // hon aamlna call lal state tabaa splash ta ye2dar yharek video.
   SplashScreenState createState() => SplashScreenState();
 }
 
@@ -86,12 +87,14 @@ class SplashScreenState extends State<SplashScreen> {
   Timer? _fallbackTimer;
 
   @override
+  // first step ll spalsh screen
   void initState() {
     super.initState();
     _isWeb = kIsWeb;
     _startSplash();
   }
 
+  // video or fallback , ---> home screen
   void _startSplash() {
     // Web fallback: skip video and move on quickly.
     if (_isWeb) {
@@ -119,6 +122,7 @@ class SplashScreenState extends State<SplashScreen> {
         });
   }
 
+  // home screen after the splash screen
   void _handleVideoState() {
     final controller = _controller;
     if (controller == null || !mounted) return;
@@ -137,12 +141,14 @@ class SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  // timer ehteyate eza video msh zabet ma ywa22ef el app.
   void _startFallbackTimer() {
     if (_fallbackTimer?.isActive ?? false) return;
     _fallbackTimer = Timer(const Duration(seconds: 2), widget.onFinished);
   }
 
   @override
+  // hon eza video ready btftah splash video, eza la btftah logo w loading indicator.
   Widget build(BuildContext context) {
     final controller = _controller;
     final isVideoReady =
@@ -174,6 +180,7 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   @override
+  // hon mnna2e el video w el timer eza ma aamlna splash video.
   void dispose() {
     _fallbackTimer?.cancel();
     _controller?.removeListener(_handleVideoState);
@@ -186,6 +193,7 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
   @override
+  // hawn mnkhalle2 el state taba3 el simulator el ra2isi.
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
@@ -216,6 +224,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late Animation<Color?> _safetyColorAnimation;
 
   @override
+  // hawn mnjhaz kel el variables w animations abl ma ybalesh el esteemel.
   void initState() {
     super.initState();
     weight = 0;
@@ -254,6 +263,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   @override
+  // hon mnsaker controllers w timers ta ydal el state ndef.
   void dispose() {
     _dangerVibrationTimer?.cancel();
     _safeResultVideoController?.dispose();
@@ -264,10 +274,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  // hon mnhawel el voltage mn string la ra2em byfhamo.
   double _getVoltageFromString(String voltageStr) {
     return double.parse(voltageStr.replaceAll('v', ''));
   }
 
+  // hon mnshaghel vibration lama el result ykoun dangerous.
   void _startDangerVibration() {
     _dangerVibrationTimer?.cancel();
     _dangerVibrationTimer = Timer.periodic(const Duration(milliseconds: 500), (
@@ -281,11 +293,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     });
   }
 
+  // hon mnwaef el vibration lama ma yeb2a fi danger.
   void _stopDangerVibration() {
     _dangerVibrationTimer?.cancel();
     _dangerVibrationTimer = null;
   }
 
+  // hon mnshaghel video el result el mnih iza kel shi tamem.
   Future<void> _showSafeResultVideo() async {
     final existingController = _safeResultVideoController;
     if (existingController != null && existingController.value.isInitialized) {
@@ -330,6 +344,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     }
   }
 
+  // hon mnkhabe w mnsaker video el result lama ma yeb2a lazem.
   void _hideSafeResultVideo() {
     final controller = _safeResultVideoController;
     _safeResultVideoController = null;
@@ -338,6 +353,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     controller?.dispose();
   }
 
+  // hon mnraje3 el simulation men el awal w mnaaml clean la kel el inputs.
   void _resetSimulation() {
     _stopDangerVibration();
     _hideSafeResultVideo();
@@ -377,6 +393,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         );
   }
 
+  // hon mn2adder wa2t el teyran 3a ases el motors w battery w weight.
   double _estimateFlightTime(
     int numMotors,
     double thrust,
@@ -411,6 +428,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return flightTimeMinutes.clamp(0.0, 60.0);
   }
 
+  // hon mnhseb addeh fi ehtemel fashal bel teyran 3a ases el TWR.
   double _estimateFailureProbability(double twr, int numMotors) {
     // TWR <= 1 means no thrust margin to safely sustain flight.
     if (twr <= 1.0) return 1.0;
@@ -428,7 +446,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return failure.clamp(0.0005, 1.0);
   }
 
-  /// Bootstrap-style form field
+  // hon mnaaml input field mratab maa label w style wahad
   Widget _buildFormField({
     required String label,
     required String hint,
@@ -485,7 +503,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-  /// Bootstrap-style dropdown
+  // hon mnaaml dropdown la yekhtar el user men options jdide.
   Widget _buildDropdown({
     required String label,
     required String value,
@@ -545,7 +563,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-  /// Bootstrap card component
+  // hon mnaaml card container la nratteb el sections b style wahad
   Widget _buildCard({
     required String title,
     String? subtitle,
@@ -601,7 +619,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-  /// Animated Safety Indicator Widget
+  // hon el indicator elli byfarje el safety aw el dangerous 
   Widget _buildSafetyIndicator() {
     return AnimatedBuilder(
       animation: _safetyAnimationController,
@@ -686,6 +704,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
+  // hon mnkhtar el icon lmneseb aala hasab level el risk.
   IconData _getSafetyIcon() {
     if (failureProbability >= _dangerFailureThreshold) return Icons.cancel;
     if (failureProbability >= 0.005) return Icons.warning;
@@ -694,6 +713,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return Icons.rocket_launch;
   }
 
+  // hon mnkhtar el kelme elli btosef level el safe aw el danger.
   String _getSafetyLevel() {
     if (failureProbability >= _dangerFailureThreshold) return 'DANGER';
     if (failureProbability >= 0.005) return 'WARNING';
@@ -702,6 +722,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return 'VERY SAFE';
   }
 
+  // hon mnaaml update ll animation tabaa el safety ta ybayen el result smoothly.
   void _updateSafetyAnimation() {
     // Normalize risk to a 0..1 progress where lower risk shows higher progress.
     double progress = (1.0 - (failureProbability / 0.05)).clamp(0.0, 1.0);
@@ -749,6 +770,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   @override
+  // home screen 
   Widget build(BuildContext context) {
     // Keep UI compact on phones and wider on tablets/desktop.
     final isMobile = MediaQuery.of(context).size.width < 768;
